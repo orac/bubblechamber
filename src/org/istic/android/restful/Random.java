@@ -47,4 +47,9 @@ public class Random {
 	public boolean get_boolean(float p_true) {
 		return generator.nextFloat() < p_true;
 	}
+	
+	/** Get a randomly distributed int in the range [0,max). */
+	public int get_int(int max) {
+		return generator.nextInt(max);
+	}
 }

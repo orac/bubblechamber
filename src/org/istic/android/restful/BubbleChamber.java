@@ -2,9 +2,9 @@ package org.istic.android.restful;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.graphics.Rect;
 
 final class BubbleChamber {
 	private Particle[] particles;
@@ -12,11 +12,16 @@ final class BubbleChamber {
 	private Canvas canvas;
 	private Random rng;
 	
-	BubbleChamber(int width, int height) {
+	private void set_backbuffer(int width, int height) {
 		backbuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		backbuffer.eraseColor(Color.WHITE);
-		canvas = new Canvas();
+		backbuffer.eraseColor(0xffc0c0c0);
+		if (canvas == null) {
+			canvas = new Canvas();
+		}
 		canvas.setBitmap(backbuffer);
+	}
+	BubbleChamber(int width, int height) {
+		set_backbuffer(width, height);
 		canvas.translate(backbuffer.getWidth() / 2.0f, backbuffer.getHeight() / 2.0f);
 		int max_dimension = Math.max(width, height);
 		rng = new Random();
@@ -44,10 +49,7 @@ final class BubbleChamber {
 	}
 
 	void resize(int width, int height) {
-		backbuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		backbuffer.eraseColor(Color.WHITE);
-		canvas.setBitmap(backbuffer);
-		canvas.translate(backbuffer.getWidth() / 2.0f, backbuffer.getHeight() / 2.0f);
+		set_backbuffer(width, height);
 	}
 	
 	public void draw(Canvas output) {
@@ -78,9 +80,14 @@ final class BubbleChamber {
 		
 		@Override
 		void add_point(PointF position, int colour) {
-			Paint paint = new Paint();
-			paint.setColor(colour);
-			canvas.drawPoint(position.x, position.y, paint);
+			Rect region = new Rect(-(canvas.getWidth()+1)/2, -(canvas.getHeight()+1)/2, (canvas.getWidth()+1)/2, (canvas.getHeight()+1)/2);
+			if (region.contains((int)position.x, (int)position.y)) {
+				Paint paint = new Paint();
+				paint.setColor(colour);
+				canvas.drawPoint(position.x, position.y, paint);
+			} else {
+				out_of_bounds = true;
+			}
 		}
 	}
 }

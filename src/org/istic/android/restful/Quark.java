@@ -29,6 +29,10 @@ public class Quark extends Particle {
 		dthetadt += d2thetadt2;
 		speed *= dspeeddt; /* note use of * so dspeeddt is actually misnamed here */
 		
+		/* Stop quarks getting stuck in one position. */
+		if (speed < 0.1f)
+			generate_internal(generator);
+		
 		if (generator.get_boolean(0.003f)) {
 			speed = -speed;
 			dspeeddt = 2.0f - dspeeddt;
