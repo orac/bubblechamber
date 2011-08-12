@@ -12,15 +12,25 @@ public class Random {
 	
 	/** Get a uniformly distributed float in the given range. */
 	public float getUniform(float min, float max) {
-		return generator.nextFloat() * (max - min) - min;
+		return generator.nextFloat() * (max - min) + min;
+	}
+	
+	/** Get a Gaussian distributed float.
+	 * 
+	 * @param mean The mean of the Gaussian distribution to draw from.
+	 * @param sd The standard deviation of the Gaussian distribution to draw from.
+	 * @return A float drawn from this distribution.
+	 */
+	public float getGaussian(float mean, float sd) {
+		return (float)generator.nextGaussian() * sd + mean;
 	}
 	
 	/** Get a float uniformly distributed in the given range and its negation.
 	 * 
 	 * The result will be in one of the ranges [min,max), (-max,min].
-	 * @param min
-	 * @param max
-	 * @return
+	 * @param min The minimum magnitude.
+	 * @param max The maximum magnitude.
+	 * @return A float drawn from one of the two ranges.
 	 */
 	public float getTwoRanges(float min, float max) {
 		float result = getUniform(min, max);

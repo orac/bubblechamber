@@ -13,6 +13,11 @@ abstract class Particle {
 	protected float dspeeddt;
 	protected float d2thetadt2;
 	
+	protected void apply_speed() {
+		position.x += speed * Math.sin(theta);
+		position.y += speed * Math.cos(theta);
+	}
+	
 	abstract void step_internal(StepCallback cb, Random generator);
 	abstract void generate_internal(Random generator);
 	

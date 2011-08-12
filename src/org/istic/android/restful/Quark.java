@@ -2,16 +2,17 @@ package org.istic.android.restful;
 
 import android.graphics.PointF;
 
+/** Dark, fast, point-symmetric. */
 public class Quark extends Particle {
 	private static final int transparent_black = 0x20000000;
 	
 	@Override
 	void generate_internal(Random generator) {
 		theta = generator.getUniform(-(float)Math.PI, (float)Math.PI);
-		speed = generator.getUniform(0.5f, 3.0f);
+		speed = generator.getUniform(1.0f, 3.0f);
 		dthetadt = 0.0f;
-		dspeeddt = generator.getUniform(0.996f, 1.001f);
-		d2thetadt2 = generator.getTwoRanges(0.001f, 0.1f);
+		dspeeddt = generator.getUniform(0.96f, 1.001f);
+		d2thetadt2 = generator.getTwoRanges(0.00001f, 0.001f);
 	}
 
 	@Override
@@ -22,8 +23,7 @@ public class Quark extends Particle {
 		antiposition.negate();
 		cb.add_point(antiposition, transparent_black);
 		
-		position.x += speed * Math.sin(theta);
-		position.y += speed * Math.cos(theta);
+		apply_speed();
 		
 		theta += dthetadt;
 		dthetadt += d2thetadt2;
