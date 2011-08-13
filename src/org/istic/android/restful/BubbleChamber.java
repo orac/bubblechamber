@@ -17,21 +17,23 @@ final class BubbleChamber {
 	private long frame_number = 0;
 	
 	private void set_backbuffer(int width, int height) {
-		backbuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+		int max_dimension = Math.max(width, height);
+		backbuffer = Bitmap.createBitmap(max_dimension, max_dimension, Bitmap.Config.ARGB_8888);
 		backbuffer.eraseColor(background_colour);
 		if (canvas == null) {
 			canvas = new Canvas();
 		}
 		canvas.setBitmap(backbuffer);
+		canvas.translate(backbuffer.getWidth() / 2.0f, backbuffer.getHeight() / 2.0f);
 	}
 	
 	BubbleChamber(int width, int height) {
 		fader = new Paint();
 		fader.setDither(false);
 		fader.setColor(background_colour);
-		fader.setAlpha(10);
+		fader.setAlpha(20);
 		set_backbuffer(width, height);
-		canvas.translate(backbuffer.getWidth() / 2.0f, backbuffer.getHeight() / 2.0f);
+		
 		int max_dimension = Math.max(width, height);
 		rng = new Random();
 		
@@ -58,14 +60,17 @@ final class BubbleChamber {
 	}
 
 	void resize(int width, int height) {
-		set_backbuffer(width, height);
+		if (width > backbuffer.getWidth() || height > backbuffer.getHeight()) {
+			set_backbuffer(width, height);
+		}
 	}
 	
 	public void draw(Canvas output) {
-		if (output.getWidth() != backbuffer.getWidth() || output.getHeight() != backbuffer.getHeight())
-			resize(output.getWidth(), output.getHeight());
-		
-		output.drawBitmap(backbuffer, 0.0f, 0.0f, new Paint());
+		output.save();
+		output.drawBitmap(backbuffer,
+			(output.getWidth() - canvas.getWidth()) / 2.0f,
+			(output.getHeight() - canvas.getHeight()) / 2.0f,
+			new Paint());
 	}
 	
 	public void step_all() {
@@ -94,14 +99,9 @@ final class BubbleChamber {
 		
 		@Override
 		void add_point(PointF position, int colour) {
-			Rect region = new Rect(-(canvas.getWidth()+1)/2, -(canvas.getHeight()+1)/2, (canvas.getWidth()+1)/2, (canvas.getHeight()+1)/2);
-			if (region.contains((int)position.x, (int)position.y)) {
-				Paint paint = new Paint();
-				paint.setColor(colour);
-				canvas.drawPoint(position.x, position.y, paint);
-			} else {
-				out_of_bounds = true;
-			}
+			Paint paint = new Paint();
+			paint.setColor(colour);
+			canvas.drawPoint(position.x, position.y, paint);
 		}
 	}
 }

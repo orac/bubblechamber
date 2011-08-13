@@ -27,6 +27,8 @@ abstract class Particle {
 			generate(generator);
 		} else {
 			step_internal(cb, generator);
+			if (speed < 0.02f && 10 < lifetime)
+				lifetime = 10;
 		}
 	}
 	
