@@ -3,8 +3,6 @@ package org.istic.android.restful;
 import android.graphics.PointF;
 
 /** Tends to form circular orbits. Draws an embossed effect. Stays close to the centre.
- * 
- *
  */
 class Hadron extends Particle {
 	private final int lighten = 0x1cffffff;

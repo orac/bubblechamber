@@ -19,8 +19,8 @@ class Muon extends Particle {
 		d2thetadt2 = generator.getTwoRanges(0.001f, 0.1f);
 		
 		int index = generator.get_int(palette.length);
-		colour = 0x2a000000 | palette[index];
-		anticolour = 0x2a000000 | palette[palette.length - 1 - index];
+		colour = 0x4a000000 | palette[index];
+		anticolour = 0x4a000000 | palette[palette.length - 1 - index];
 
 	}
 
