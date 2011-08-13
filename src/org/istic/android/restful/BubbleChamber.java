@@ -7,20 +7,29 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 
 final class BubbleChamber {
+	private static final int background_colour = 0xffc0c0c0;
 	private Particle[] particles;
 	private Bitmap backbuffer;
 	private Canvas canvas;
 	private Random rng;
+	private int fade_out_frame_counter = 10;
+	private Paint fader;
+	private long frame_number = 0;
 	
 	private void set_backbuffer(int width, int height) {
 		backbuffer = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-		backbuffer.eraseColor(0xffc0c0c0);
+		backbuffer.eraseColor(background_colour);
 		if (canvas == null) {
 			canvas = new Canvas();
 		}
 		canvas.setBitmap(backbuffer);
 	}
+	
 	BubbleChamber(int width, int height) {
+		fader = new Paint();
+		fader.setDither(false);
+		fader.setColor(background_colour);
+		fader.setAlpha(10);
 		set_backbuffer(width, height);
 		canvas.translate(backbuffer.getWidth() / 2.0f, backbuffer.getHeight() / 2.0f);
 		int max_dimension = Math.max(width, height);
@@ -60,6 +69,11 @@ final class BubbleChamber {
 	}
 	
 	public void step_all() {
+		++frame_number;
+		if (--fade_out_frame_counter == 0) {
+			fade_out_frame_counter = 10;
+			canvas.drawPaint(fader);
+		}
 		AddPointCallback cb = new AddPointCallback();
 		for (Particle p : particles) {
 			cb.out_of_bounds = false;

@@ -52,4 +52,14 @@ public class Random {
 	public int get_int(int max) {
 		return generator.nextInt(max);
 	}
+	
+	/** Get a Gaussian-distributed int.
+	 * 
+	 * @param mean The mean of the Gaussian distribution to draw from.
+	 * @param sd The standard deviation of the Gaussian distribution to draw from.
+	 * @return An integer drawn from this distribution.
+	 */
+	public int get_gaussian_int(float mean, float sd) {
+		return Math.round((float)(generator.nextGaussian() * sd + mean));
+	}
 }

@@ -11,7 +11,7 @@ public class Quark extends Particle {
 		theta = generator.getUniform(-(float)Math.PI, (float)Math.PI);
 		speed = generator.getUniform(1.0f, 3.0f);
 		dthetadt = 0.0f;
-		dspeeddt = generator.getUniform(0.96f, 1.001f);
+		dspeeddt = generator.getUniform(0.94f, 1.001f);
 		d2thetadt2 = generator.getTwoRanges(0.00001f, 0.001f);
 	}
 
@@ -28,10 +28,6 @@ public class Quark extends Particle {
 		theta += dthetadt;
 		dthetadt += d2thetadt2;
 		speed *= dspeeddt; /* note use of * so dspeeddt is actually misnamed here */
-		
-		/* Stop quarks getting stuck in one position. */
-		if (speed < 0.1f)
-			generate_internal(generator);
 		
 		if (generator.get_boolean(0.003f)) {
 			speed = -speed;

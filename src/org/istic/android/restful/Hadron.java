@@ -2,12 +2,12 @@ package org.istic.android.restful;
 
 import android.graphics.PointF;
 
-/** Tends to form circular orbits. Draws an embossed effect.
+/** Tends to form circular orbits. Draws an embossed effect. Stays close to the centre.
  * 
  *
  */
 class Hadron extends Particle {
-	private final int lighten = 0x40ffffff;
+	private final int lighten = 0x1cffffff;
 	private final int darken = 0x1c000000;
 	private boolean stable_orbit;
 	@Override
@@ -31,12 +31,10 @@ class Hadron extends Particle {
 		dthetadt += d2thetadt2;
 		speed *= dspeeddt;
 		
-		if (stable_orbit) {
-			if (generator.get_boolean(0.001f))
-				generate(generator);
-		} else {
+		if (!stable_orbit) {
 			if (generator.get_boolean(0.003f)) {
 				stable_orbit = true;
+				lifetime = generator.get_gaussian_int(1000.0f, 200.0f);
 				dspeeddt = 1.0f;
 				d2thetadt2 = generator.getGaussian(0.0f, 0.00001f);
 			}

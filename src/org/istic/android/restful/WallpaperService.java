@@ -16,7 +16,7 @@ public class WallpaperService extends
 				chamber.step_all();
 				draw();
 				handler.removeCallbacks(this);
-				handler.postDelayed(this, 1000);
+				handler.postDelayed(this, 500);
 			}
 		};
 		
