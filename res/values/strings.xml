@@ -2,4 +2,6 @@
 <resources>
     <string name="wallpaper_description">An artistic rendering of particles inspired by bubble chamber pictures.</string>
     <string name="app_name">Bubble Chamber</string>
+    <string name="palettepref_title">Colour scheme</string>
+    <string name="palettepref_summary">Sets the colours of the particles and background</string>
 </resources>

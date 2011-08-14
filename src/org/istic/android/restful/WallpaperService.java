@@ -1,5 +1,6 @@
 package org.istic.android.restful;
 
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 import android.os.Handler;
@@ -8,9 +9,15 @@ public class WallpaperService extends
 		android.service.wallpaper.WallpaperService {
 
 	private final Handler handler = new Handler();
+	private static final String preferences_name = "org.istic.android.BubbleChamberprefs";
 	
-	private class RestfulEngine extends Engine {
+	private class RestfulEngine
+		extends Engine
+		implements SharedPreferences.OnSharedPreferenceChangeListener
+	{
 		BubbleChamber chamber;
+		private SharedPreferences prefs;
+		
 		private final Runnable stepper = new Runnable() {
 			public void run() {
 				chamber.step_all();
@@ -21,6 +28,9 @@ public class WallpaperService extends
 		};
 		
 		RestfulEngine() {
+			prefs = WallpaperService.this.getSharedPreferences(preferences_name, MODE_PRIVATE);
+			prefs.registerOnSharedPreferenceChangeListener(this);
+			onSharedPreferenceChanged(prefs, null);
 		}
 		
 		@Override
@@ -67,6 +77,12 @@ public class WallpaperService extends
 			} finally {
 				if (c != null) holder.unlockCanvasAndPost(c);
 			}
+		}
+
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 	@Override
