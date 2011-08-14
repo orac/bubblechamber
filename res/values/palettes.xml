@@ -4,5 +4,9 @@
         <item>Winter, New Mexico</item>
         <item>Perdenales Canyon</item>
     </string-array>
+    <string-array name="palettevalues">
+        <item>a</item>
+        <item>b</item>
+    </string-array>
     
 </resources>

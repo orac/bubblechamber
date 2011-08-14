@@ -9,7 +9,7 @@ public class WallpaperService extends
 		android.service.wallpaper.WallpaperService {
 
 	private final Handler handler = new Handler();
-	private static final String preferences_name = "org.istic.android.BubbleChamberprefs";
+	static final String preferences_name = "org.istic.android.BubbleChamberprefs";
 	
 	private class RestfulEngine
 		extends Engine
@@ -17,13 +17,14 @@ public class WallpaperService extends
 	{
 		BubbleChamber chamber;
 		private SharedPreferences prefs;
+		private volatile int millis_per_frame;
 		
 		private final Runnable stepper = new Runnable() {
 			public void run() {
 				chamber.step_all();
 				draw();
 				handler.removeCallbacks(this);
-				handler.postDelayed(this, 500);
+				handler.postDelayed(this, millis_per_frame);
 			}
 		};
 		
@@ -81,7 +82,9 @@ public class WallpaperService extends
 
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-			// TODO Auto-generated method stub
+			if (key == null || key.equals(new String("framerate"))) {
+				millis_per_frame = sharedPreferences.getInt("framerate", 500);
+			}
 			
 		}
 	}

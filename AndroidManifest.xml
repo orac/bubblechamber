@@ -12,6 +12,7 @@
             </intent-filter>
             <meta-data android:name="android.service.wallpaper" android:resource="@xml/wallpaper"></meta-data>
         </service>
+        <activity android:name="BubbleChamberSettings" android:exported="true" android:label="@string/settings_label"></activity>
 
 
     </application>
