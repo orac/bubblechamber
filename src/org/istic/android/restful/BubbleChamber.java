@@ -17,13 +17,17 @@ final class BubbleChamber {
 	
 	private void set_backbuffer(int width, int height) {
 		int max_dimension = Math.max(width, height);
+		int min_dimension = Math.min(width, height);
 		backbuffer = Bitmap.createBitmap(max_dimension, max_dimension, Bitmap.Config.ARGB_8888);
 		backbuffer.eraseColor(background_colour);
 		if (canvas == null) {
 			canvas = new Canvas();
+		} else {
+			canvas.setMatrix(null);
 		}
 		canvas.setBitmap(backbuffer);
 		canvas.translate(backbuffer.getWidth() / 2.0f, backbuffer.getHeight() / 2.0f);
+		canvas.scale(min_dimension / 200.0f, min_dimension / 200.0f);
 	}
 	
 	BubbleChamber(int width, int height) {
@@ -65,7 +69,6 @@ final class BubbleChamber {
 	}
 	
 	public void draw(Canvas output) {
-		output.save();
 		output.drawBitmap(backbuffer,
 			(output.getWidth() - canvas.getWidth()) / 2.0f,
 			(output.getHeight() - canvas.getHeight()) / 2.0f,

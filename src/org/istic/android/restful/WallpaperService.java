@@ -62,8 +62,6 @@ public class WallpaperService extends
 			try {
 				c = holder.lockCanvas();
 				if (c != null) {
-					if (chamber == null)
-						chamber = new BubbleChamber(c.getWidth(), c.getHeight());
 					chamber.draw(c);
 				}
 			} finally {
