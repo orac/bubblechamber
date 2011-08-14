@@ -10,6 +10,11 @@ public class Random {
 		generator = new java.util.Random(seed);
 	}
 	
+	/** Get a uniformly distributed float in the range [0,1). */
+	public float get_uniform() {
+		return generator.nextFloat();
+	}
+	
 	/** Get a uniformly distributed float in the given range. */
 	public float getUniform(float min, float max) {
 		return generator.nextFloat() * (max - min) + min;

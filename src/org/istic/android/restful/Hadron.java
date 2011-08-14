@@ -5,8 +5,8 @@ import android.graphics.PointF;
 /** Tends to form circular orbits. Draws an embossed effect. Stays close to the centre.
  */
 class Hadron extends Particle {
-	private final int lighten = 0x1cffffff;
-	private final int darken = 0x1c000000;
+	private static final int lighten = 0x1cffffff;
+	private static final int darken = 0x1c000000;
 	private boolean stable_orbit;
 	@Override
 	void generate_internal(Random generator) {

@@ -28,6 +28,7 @@ final class BubbleChamber {
 		canvas.setBitmap(backbuffer);
 		canvas.translate(backbuffer.getWidth() / 2.0f, backbuffer.getHeight() / 2.0f);
 		canvas.scale(min_dimension / 200.0f, min_dimension / 200.0f);
+		canvas.drawPaint(fader);
 	}
 	
 	BubbleChamber(int width, int height) {
