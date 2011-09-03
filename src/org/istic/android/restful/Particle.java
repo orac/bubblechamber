@@ -20,11 +20,11 @@ abstract class Particle {
 	}
 	
 	abstract void step_internal(StepCallback cb, Random generator);
-	abstract void generate_internal(Random generator);
+	abstract void generate_internal(Random generator, Palette palette);
 	
-	public final void step(StepCallback cb, Random generator) {
+	public final void step(StepCallback cb, Random generator, Palette palette) {
 		if (lifetime-- < 0) {
-			generate(generator);
+			generate(generator, palette);
 		} else {
 			step_internal(cb, generator);
 			if (speed < 0.02f && 10 < lifetime)
@@ -32,9 +32,9 @@ abstract class Particle {
 		}
 	}
 	
-	public final void generate(Random generator) {
+	public final void generate(Random generator, Palette palette) {
 		position = new PointF();
 		lifetime = generator.get_gaussian_int(10000.0f, 100.0f);
-		generate_internal(generator);
+		generate_internal(generator, palette);
 	}
 }

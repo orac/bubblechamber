@@ -50,7 +50,9 @@ public class WallpaperService extends
 				int width, int height) {
 			super.onSurfaceChanged(holder, format, width, height);
 			if (chamber == null) {
-				chamber = new BubbleChamber(width, height);
+				String defaultPalette = WallpaperService.this.getResources().getStringArray(R.array.palettevalues)[0];
+				String palette = prefs.getString("palette", defaultPalette);
+				chamber = new BubbleChamber(width, height, palette);
 			} else {
 				chamber.resize(width, height);
 			}
@@ -85,11 +87,16 @@ public class WallpaperService extends
 			if (key == null || key.equals(new String("framerate"))) {
 				millis_per_frame = sharedPreferences.getInt("framerate", 500);
 			}
-			
+			if (chamber != null && (key == null || key.equals(new String("palette")))) {
+				String defaultPalette = WallpaperService.this.getResources().getStringArray(R.array.palettevalues)[0];
+				chamber.set_palette(sharedPreferences.getString("palette", defaultPalette));
+			}
 		}
 	}
+
 	@Override
 	public Engine onCreateEngine() {
+		//android.os.Debug.waitForDebugger();
 		return new RestfulEngine();
 	}
 

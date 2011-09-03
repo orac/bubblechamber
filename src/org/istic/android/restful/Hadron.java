@@ -9,7 +9,7 @@ class Hadron extends Particle {
 	private static final int darken = 0x1c000000;
 	private boolean stable_orbit;
 	@Override
-	void generate_internal(Random generator) {
+	void generate_internal(Random generator, Palette palette) {
 		stable_orbit = false;
 		theta = generator.getUniform(0, 2.0f * (float)Math.PI);
 		speed = generator.getUniform(0.5f, 3.5f);

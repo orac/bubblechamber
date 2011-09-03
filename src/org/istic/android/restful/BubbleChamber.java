@@ -6,11 +6,11 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 
 final class BubbleChamber {
-	private static final int background_colour = 0xffc0c0c0;
 	private Particle[] particles;
 	private Bitmap backbuffer;
 	private Canvas canvas;
 	private Random rng;
+	private Palette palette;
 	private int fade_out_frame_counter = 10;
 	private Paint fader;
 	private long frame_number = 0;
@@ -19,7 +19,7 @@ final class BubbleChamber {
 		int max_dimension = Math.max(width, height);
 		int min_dimension = Math.min(width, height);
 		backbuffer = Bitmap.createBitmap(max_dimension, max_dimension, Bitmap.Config.ARGB_8888);
-		backbuffer.eraseColor(background_colour);
+		backbuffer.eraseColor(palette.get_background() | 0xff000000);
 		if (canvas == null) {
 			canvas = new Canvas();
 		} else {
@@ -31,10 +31,12 @@ final class BubbleChamber {
 		canvas.drawPaint(fader);
 	}
 	
-	BubbleChamber(int width, int height) {
+	BubbleChamber(int width, int height, String palette) {
+		this.palette = new Palette(palette);
+		
 		fader = new Paint();
 		fader.setDither(false);
-		fader.setColor(background_colour);
+		fader.setColor(this.palette.get_background());
 		fader.setAlpha(20);
 		set_backbuffer(width, height);
 		
@@ -51,16 +53,22 @@ final class BubbleChamber {
 		int i;
 		for (i = 0; i < num_quarks; ++i) {
 			particles[i] = new Quark();
-			particles[i].generate(rng);
+			particles[i].generate(rng, this.palette);
 		}
 		for (; i < num_quarks + num_hadrons; ++i) {
 			particles[i] = new Hadron();
-			particles[i].generate(rng);
+			particles[i].generate(rng, this.palette);
 		}
 		for (; i < particles.length; ++i ) {
 			particles[i] = new Muon();
-			particles[i].generate(rng);
+			particles[i].generate(rng, this.palette);
 		}
+	}
+	
+	void set_palette(String input) {
+		palette = new Palette(input);
+		fader.setColor(palette.get_background());
+		fader.setAlpha(20);
 	}
 
 	void resize(int width, int height) {
@@ -85,10 +93,10 @@ final class BubbleChamber {
 		AddPointCallback cb = new AddPointCallback();
 		for (Particle p : particles) {
 			cb.out_of_bounds = false;
-			p.step(cb, rng);
+			p.step(cb, rng, palette);
 			
 			if (cb.out_of_bounds) {
-				p.generate(rng);
+				p.generate(rng, palette);
 			}
 		}
 	}

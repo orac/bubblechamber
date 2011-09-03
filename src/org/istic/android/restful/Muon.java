@@ -5,11 +5,10 @@ import android.graphics.PointF;
 /** Colourful. Starts out fast but soon decays to a much slower speed in an unstable orbit, allowing it to make a ring or disc at any point of the screen. 
  */
 class Muon extends Particle {
-	static final int[] palette = {0x3a242b, 0x3b2426, 0x352325, 0x836454, 0x7d5533, 0x8b7352, 0xb1a181, 0xa4632e, 0xbb6b33, 0xb47249, 0xca7239, 0xd29057, 0xe0b87e, 0xd9b166, 0xf5eabe, 0xfcfadf, 0xd9d1b0, 0xfcfadf, 0xd1d1ca, 0xa7b1ac, 0x879a8c, 0x9186ad, 0x776a8e};
-	private int colour, anticolour;
+	private ColourPair colour;
 	private float terminal_speed;
 	@Override
-	void generate_internal(Random generator) {
+	void generate_internal(Random generator, Palette palette) {
 		speed = generator.getUniform(2.0f, 32.0f);
 		terminal_speed = generator.getUniform(.1f, 3.0f);
 		dspeeddt = generator.getUniform(0.0001f, 0.001f);
@@ -18,10 +17,9 @@ class Muon extends Particle {
 		dthetadt = 0.0f;
 		d2thetadt2 = generator.getTwoRanges(0.001f, 0.1f);
 		
-		int index = generator.get_int(palette.length);
-		colour = 0x4a000000 | palette[index];
-		anticolour = 0x4a000000 | palette[palette.length - 1 - index];
-
+		colour = palette.get_muon_pair(generator);
+		colour.positive |= 0x4a000000;
+		colour.negative |= 0x4a000000;
 	}
 
 	@Override
@@ -29,8 +27,8 @@ class Muon extends Particle {
 		PointF antiposition = new PointF();
 		antiposition.set(position);
 		antiposition.negate();
-		cb.add_point(position, colour);
-		cb.add_point(antiposition, anticolour);
+		cb.add_point(position, colour.positive);
+		cb.add_point(antiposition, colour.negative);
 		
 		apply_speed();
 		theta += dthetadt;
