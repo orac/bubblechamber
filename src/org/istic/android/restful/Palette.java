@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Palette {
 	private int background;
 	private int quark;
-	private ArrayList<Integer> muon;
+	private ArrayList<ColourPair> muon;
 	
 	/** Get the background colour.
 	 * 
@@ -31,24 +31,24 @@ public class Palette {
 	 * @return A matching pair of colours, randomly selected from the muon palette.
 	 */
 	ColourPair get_muon_pair(Random rng) {
-		int index = rng.get_int(muon.size());
-		return new ColourPair(muon.get(index).intValue(), muon.get(muon.size() - index - 1).intValue());
+		return muon.get( rng.get_int(muon.size()) );
 	}
 	
 	Palette(String input) throws PaletteParseException {
-		muon = new ArrayList<Integer>(15);
+		muon = new ArrayList<ColourPair>(15);
 		Pattern bg = Pattern.compile("^bg\\s+(0x\\p{XDigit}+)\\s*;\\s*quark\\s+(0x\\p{XDigit}+)\\s*;\\s*muon\\s+");
-		Pattern c = Pattern.compile("(0x\\p{XDigit}+)\\s+");
+		Pattern pair = Pattern.compile("(0x\\p{XDigit}+),(0x\\p{XDigit}+)\\s+");
 		Matcher m = bg.matcher(input);
 		if (m.find()) {
 			try {
 				background = Integer.decode(m.group(1));
 				quark = Integer.decode(m.group(2));
 				int end = m.end();
-				m.usePattern(c);
+				m.usePattern(pair);
 				m.region(end, m.regionEnd());
 				while (m.find()) {
-					muon.add(Integer.decode(m.group(1)));
+					ColourPair muon_pair = new ColourPair(Integer.decode(m.group(1)), Integer.decode(m.group(2)));
+					muon.add(muon_pair);
 				}
 			} catch (NumberFormatException e) {
 				throw new PaletteParseException();

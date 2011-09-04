@@ -7,6 +7,7 @@ import android.graphics.PointF;
 class Muon extends Particle {
 	private ColourPair colour;
 	private float terminal_speed;
+	
 	@Override
 	void generate_internal(Random generator, Palette palette) {
 		speed = generator.getUniform(2.0f, 32.0f);

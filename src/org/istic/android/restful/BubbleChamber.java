@@ -11,7 +11,7 @@ final class BubbleChamber {
 	private Canvas canvas;
 	private Random rng;
 	private Palette palette;
-	private int fade_out_frame_counter = 10;
+	private int fade_out_frame_counter = 20;
 	private Paint fader;
 	private long frame_number = 0;
 	
@@ -67,8 +67,15 @@ final class BubbleChamber {
 	
 	void set_palette(String input) {
 		palette = new Palette(input);
+		
 		fader.setColor(palette.get_background());
+		fader.setAlpha(255);
+		canvas.drawPaint(fader);
 		fader.setAlpha(20);
+		
+		for (Particle p : particles) {
+			p.generate(rng, palette);
+		}
 	}
 
 	void resize(int width, int height) {
@@ -87,7 +94,7 @@ final class BubbleChamber {
 	public void step_all() {
 		++frame_number;
 		if (--fade_out_frame_counter == 0) {
-			fade_out_frame_counter = 10;
+			fade_out_frame_counter = 20;
 			canvas.drawPaint(fader);
 		}
 		AddPointCallback cb = new AddPointCallback();
