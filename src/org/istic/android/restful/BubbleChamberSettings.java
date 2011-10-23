@@ -12,6 +12,7 @@ public class BubbleChamberSettings extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 		getPreferenceManager().setSharedPreferencesName(WallpaperService.preferences_name);
 		addPreferencesFromResource(R.xml.bubblechambersettings);
+		setContentView(R.layout.main);
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 

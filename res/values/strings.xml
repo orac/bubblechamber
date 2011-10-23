@@ -5,6 +5,10 @@
     <string name="palettepref_title">Colour scheme</string>
     <string name="palettepref_summary">Sets the colours of the particles and background</string>
     <string name="frameratepref_title">Animation speed</string>
-    <string name="frameratepref_summary">How fast should the wallpaper be animated?</string>
+    <string name="frameratepref_summary">How fast should the wallpaper be animated?</string><string name="feedback_title">Send feedback to the author</string><string name="feedback_summary">Please tell me about your experience with Bubble Chamber</string>
     <string name="settings_label">Preferences</string>
+    <string name="about">Bubble Chamber is written by and © 2011 Dan Hulme.\nBased on an original artwork by J. Tarbell of Oct 2003. Find out more about his &quot;bubble chamber&quot; pictures and the algorithm behind them at http://complexification.net/gallery/machines/bubblechamber\nThanks to Matthew Wiggins for the SeekBarPreference class, which is used here under the Apache license 2.0. http://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="about_title">About</string>
+    
+    
 </resources>

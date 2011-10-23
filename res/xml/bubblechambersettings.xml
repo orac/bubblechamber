@@ -2,6 +2,11 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android" android:key="org.istic.android.BubbleChamberprefs">
     <ListPreference android:entries="@array/palettenames" android:summary="@string/palettepref_summary" android:entryValues="@array/palettevalues" android:title="@string/palettepref_title" android:key="palette"></ListPreference>
-    <com.hlidskialf.android.preference.SeekBarPreference android:key="framerate" android:summary="@string/frameratepref_summary" android:defaultValue="500" android:text="ms/frame" android:max="1000" android:title="@string/frameratepref_title"></com.hlidskialf.android.preference.SeekBarPreference>
-    
+    <com.hlidskialf.android.preference.SeekBarPreference android:title="@string/frameratepref_title" android:summary="@string/frameratepref_summary" android:defaultValue="500" android:max="1000" android:key="framerate" android:text="ms/frame"></com.hlidskialf.android.preference.SeekBarPreference>
+    <PreferenceCategory android:title="@string/about_title">
+    </PreferenceCategory>
+    <PreferenceScreen android:title="@string/feedback_title" android:summary="@string/feedback_summary">
+    	<intent android:action="android.intent.action.VIEW" android:data="mailto:futur@istic.org?subject=Bubble Chamber feedback">
+    	</intent>
+    </PreferenceScreen>
 </PreferenceScreen>
