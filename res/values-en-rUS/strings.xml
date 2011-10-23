@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="palettepref_title">Color scheme</string>
+    <string name="palettepref_summary">Sets the colors of the particles and background</string>
+    
+    
+</resources>
