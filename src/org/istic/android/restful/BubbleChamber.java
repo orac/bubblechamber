@@ -37,19 +37,19 @@ final class BubbleChamber {
 		fader = new Paint();
 		fader.setDither(false);
 		fader.setColor(this.palette.get_background());
-		fader.setAlpha(20);
+		fader.setAlpha(10);
 		set_backbuffer(width, height);
 		
-		int max_dimension = Math.max(width, height);
+		int area = (width * height) / 1000;
 		rng = new Random();
 		
 		float quark_frac = .3f;
 		float muon_frac = .42f;
 		float hadron_frac = .21f;
-		int num_quarks = (int) (quark_frac / (quark_frac + muon_frac + hadron_frac) * max_dimension);
-		int num_hadrons = (int) (hadron_frac / (quark_frac + muon_frac + hadron_frac) * max_dimension);
+		int num_quarks = (int) (quark_frac / (quark_frac + muon_frac + hadron_frac) * area);
+		int num_hadrons = (int) (hadron_frac / (quark_frac + muon_frac + hadron_frac) * area);
 		
-		particles = new Particle[max_dimension];
+		particles = new Particle[area];
 		int i;
 		for (i = 0; i < num_quarks; ++i) {
 			particles[i] = new Quark();

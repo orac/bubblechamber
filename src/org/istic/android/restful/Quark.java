@@ -10,14 +10,14 @@ public class Quark extends Particle {
 	void generate_internal(Random generator, Palette palette) {
 		theta = generator.getUniform(-(float)Math.PI, (float)Math.PI);
 		float speed_range = generator.get_uniform();
-		speed = 1.0f + speed_range * 5.0f;
+		speed = 0.5f + speed_range * 2.0f;
 		/* They all start out going in straight lines. */
 		dthetadt = 0.0f;
-		dspeeddt = generator.getUniform(0.94f, 1.001f);
+		dspeeddt = generator.getGaussian(0.96f, 0.03f);
 		d2thetadt2 = generator.getTwoRanges(0.00001f, 0.001f);
 		
 		/* Set opacity in proportion to initial speed, to compensate for the points being spaced further apart. */
-		int opacity = (0x20 + (int)(speed_range * 0x60)) << 24;
+		int opacity = (0x20 + (int)(speed_range * 0x50)) << 24;
 		colour = opacity | palette.get_quark(generator);
 	}
 

@@ -20,8 +20,8 @@ class Hadron extends Particle {
 
 	@Override
 	void step_internal(StepCallback cb, Random generator) {
-		cb.add_point(new PointF(position.x, position.y - 1), lighten);
-		cb.add_point(new PointF(position.x, position.y + 1), darken);
+		cb.add_point(new PointF(position.x, position.y - 0.1f), lighten);
+		cb.add_point(new PointF(position.x, position.y + 0.1f), darken);
 		
 		apply_speed();
 		
@@ -32,7 +32,7 @@ class Hadron extends Particle {
 		if (!stable_orbit) {
 			if (generator.get_boolean(0.003f)) {
 				stable_orbit = true;
-				lifetime = generator.get_gaussian_int(1000.0f, 200.0f);
+				lifetime = generator.get_gaussian_int(2000.0f, 200.0f);
 				dspeeddt = 1.0f;
 				d2thetadt2 = generator.getGaussian(0.0f, 0.00001f);
 			}

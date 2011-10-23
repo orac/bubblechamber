@@ -16,7 +16,7 @@ class Muon extends Particle {
 		
 		theta = generator.getUniform(-(float)Math.PI, (float)Math.PI);
 		dthetadt = 0.0f;
-		d2thetadt2 = generator.getTwoRanges(0.001f, 0.1f);
+		d2thetadt2 = generator.getTwoRanges(0.001f, 0.01f);
 		
 		colour = palette.get_muon_pair(generator);
 		colour.positive |= 0x4a000000;
