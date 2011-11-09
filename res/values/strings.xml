@@ -9,6 +9,8 @@
     <string name="settings_label">Preferences</string>
     <string name="about">Bubble Chamber is written by and © 2011 Dan Hulme.\nBased on an original artwork by J. Tarbell of Oct 2003. Find out more about his &quot;bubble chamber&quot; pictures and the algorithm behind them at http://complexification.net/gallery/machines/bubblechamber\nThanks to Matthew Wiggins for the SeekBarPreference class, which is used here under the Apache license 2.0. http://www.apache.org/licenses/LICENSE-2.0</string>
     <string name="about_title">About</string>
+    <string name="num_particlespref_title">Number of particles</string>
+    <string name="num_particlespref_summary">Relative number of particles to show at a time</string>
     
     
 </resources>

@@ -2,6 +2,7 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android" android:key="org.istic.android.BubbleChamberprefs">
     <ListPreference android:entries="@array/palettenames" android:summary="@string/palettepref_summary" android:entryValues="@array/palettevalues" android:title="@string/palettepref_title" android:key="palette"></ListPreference>
+    <com.hlidskialf.android.preference.SeekBarPreference android:title="@string/num_particlespref_title" android:summary="@string/num_particlespref_summary" android:defaultValue="20" android:max="100" android:key="num_particles" android:text="%"></com.hlidskialf.android.preference.SeekBarPreference>
     <com.hlidskialf.android.preference.SeekBarPreference android:title="@string/frameratepref_title" android:summary="@string/frameratepref_summary" android:defaultValue="500" android:max="1000" android:key="framerate" android:text="ms/frame"></com.hlidskialf.android.preference.SeekBarPreference>
     <PreferenceCategory android:title="@string/about_title">
     </PreferenceCategory>

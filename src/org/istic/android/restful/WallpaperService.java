@@ -52,7 +52,8 @@ public class WallpaperService extends
 			if (chamber == null) {
 				String defaultPalette = WallpaperService.this.getResources().getStringArray(R.array.palettevalues)[0];
 				String palette = prefs.getString("palette", defaultPalette);
-				chamber = new BubbleChamber(width, height, palette);
+				float num_particles = prefs.getInt("num_particles", 50) / 100.0f;
+				chamber = new BubbleChamber(width, height, palette, num_particles);
 			} else {
 				chamber.resize(width, height);
 			}
@@ -90,6 +91,9 @@ public class WallpaperService extends
 			if (chamber != null && (key == null || key.equals(new String("palette")))) {
 				String defaultPalette = WallpaperService.this.getResources().getStringArray(R.array.palettevalues)[0];
 				chamber.set_palette(sharedPreferences.getString("palette", defaultPalette));
+			}
+			if (chamber != null && (key == null || key.equals(new String("num_particles")))) {
+				chamber.set_particle_fraction(sharedPreferences.getInt("num_particles", 50) / 100.0f);
 			}
 		}
 	}
