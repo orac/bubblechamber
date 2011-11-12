@@ -1,4 +1,4 @@
-package org.istic.android.restful;
+package com.shadowburst.bubblechamber;
 
 import java.util.regex.*;
 import java.util.ArrayList;

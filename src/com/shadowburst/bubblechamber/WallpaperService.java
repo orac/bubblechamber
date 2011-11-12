@@ -1,4 +1,4 @@
-package org.istic.android.restful;
+package com.shadowburst.bubblechamber;
 
 import android.content.SharedPreferences;
 import android.graphics.Canvas;

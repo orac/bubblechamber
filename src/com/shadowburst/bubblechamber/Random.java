@@ -1,4 +1,4 @@
-package org.istic.android.restful;
+package com.shadowburst.bubblechamber;
 
 public class Random {
 	private java.util.Random generator;
