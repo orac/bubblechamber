@@ -7,7 +7,7 @@
     <PreferenceCategory android:title="@string/about_title">
     </PreferenceCategory>
     <PreferenceScreen android:title="@string/feedback_title" android:summary="@string/feedback_summary">
-    	<intent android:action="android.intent.action.VIEW" android:data="mailto:futur@istic.org?subject=Bubble Chamber feedback">
+    	<intent android:action="android.intent.action.VIEW" android:data="mailto:support@shadowburst.com?subject=Bubble Chamber feedback">
     	</intent>
     </PreferenceScreen>
 </PreferenceScreen>
