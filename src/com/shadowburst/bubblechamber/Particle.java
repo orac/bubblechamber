@@ -3,7 +3,7 @@ package com.shadowburst.bubblechamber;
 import android.graphics.PointF;
 
 abstract class Particle {
-	static abstract class StepCallback {
+	interface StepCallback {
 		abstract void add_point(PointF position, int colour);
 	}
 	protected PointF position;

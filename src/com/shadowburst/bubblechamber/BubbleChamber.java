@@ -9,19 +9,32 @@ final class BubbleChamber {
 	private Particle[] particles;
 	private Bitmap backbuffer;
 	private Canvas canvas;
+	
 	/** Supplies random numbers to particles.
 	 * @invariant Not null.
 	 */
 	private Random rng;
 	private Palette palette;
 	private int fade_out_frame_counter = 20;
+	
 	/** Translucent solid colour.
 	 * 
 	 * Used to fade old trails to the background colour.
 	 * @invariant Not null.
 	 */
 	private Paint fader;
+	
+	/** A default-constructed Paint.
+	 * Stashed to avoid some calls to new.
+	 * @invariant Not null.
+	 */
+	private final Paint noop;
 	private long frame_number = 0;
+	
+	/** The callback for Particle::step.
+	 * Since it doesn't have any state that doesn't get reset for each particle anyway, I thought I might as well keep it here rather than recreate it each frame. 
+	 */
+	private AddPointCallback cb;
 
 	private void set_backbuffer(int width, int height) {
 		int max_dimension = Math.max(width, height);
@@ -42,6 +55,8 @@ final class BubbleChamber {
 	}
 
 	BubbleChamber(int width, int height, String palette, float particle_frac) {
+		noop = new Paint();
+		cb = new AddPointCallback();
 		this.palette = new Palette(palette);
 		rng = new Random();
 		
@@ -85,29 +100,31 @@ final class BubbleChamber {
 				* backbuffer.getHeight() * particle_frac) / 500.0f);
 		num_particles = Math.max(num_particles, 1);
 		
-		final float quark_frac = .3f;
-		final float muon_frac = .42f;
-		final float hadron_frac = .21f;
-		final int num_quarks = (int) (quark_frac
-				/ (quark_frac + muon_frac + hadron_frac) * num_particles);
-		final int num_hadrons = (int) (hadron_frac
-				/ (quark_frac + muon_frac + hadron_frac) * num_particles);
-
-		particles = new Particle[num_particles];
-		int i;
-		for (i = 0; i < num_quarks; ++i) {
-			particles[i] = new Quark();
-			particles[i].generate(rng, this.palette);
+		if (particles.length != num_particles) {
+			final float quark_frac = .3f;
+			final float muon_frac = .42f;
+			final float hadron_frac = .21f;
+			final int num_quarks = (int) (quark_frac
+					/ (quark_frac + muon_frac + hadron_frac) * num_particles);
+			final int num_hadrons = (int) (hadron_frac
+					/ (quark_frac + muon_frac + hadron_frac) * num_particles);
+	
+			particles = new Particle[num_particles];
+			int i;
+			for (i = 0; i < num_quarks; ++i) {
+				particles[i] = new Quark();
+				particles[i].generate(rng, this.palette);
+			}
+			for (; i < num_quarks + num_hadrons; ++i) {
+				particles[i] = new Hadron();
+				particles[i].generate(rng, this.palette);
+			}
+			for (; i < particles.length; ++i) {
+				particles[i] = new Muon();
+				particles[i].generate(rng, this.palette);
+			}
+			clear();
 		}
-		for (; i < num_quarks + num_hadrons; ++i) {
-			particles[i] = new Hadron();
-			particles[i].generate(rng, this.palette);
-		}
-		for (; i < particles.length; ++i) {
-			particles[i] = new Muon();
-			particles[i].generate(rng, this.palette);
-		}
-		clear();
 	}
 	
 	private void clear() {
@@ -124,7 +141,7 @@ final class BubbleChamber {
 	public void draw(Canvas output) {
 		output.drawBitmap(backbuffer,
 				(output.getWidth() - canvas.getWidth()) / 2.0f, (output
-						.getHeight() - canvas.getHeight()) / 2.0f, new Paint());
+						.getHeight() - canvas.getHeight()) / 2.0f, noop);
 	}
 
 	public long get_frame_number() {
@@ -136,7 +153,6 @@ final class BubbleChamber {
 			fade_out_frame_counter = 20;
 			canvas.drawPaint(fader);
 		}
-		AddPointCallback cb = new AddPointCallback();
 		for (Particle p : particles) {
 			cb.out_of_bounds = false;
 			p.step(cb, rng, palette);
@@ -148,18 +164,18 @@ final class BubbleChamber {
 		return ++frame_number;
 	}
 
-	private final class AddPointCallback extends Particle.StepCallback {
+	private final class AddPointCallback implements Particle.StepCallback {
 		boolean out_of_bounds;
+		Paint p;
 
 		AddPointCallback() {
 			this.out_of_bounds = false;
+			p = new Paint();
 		}
 
-		@Override
-		void add_point(PointF position, int colour) {
-			Paint paint = new Paint();
-			paint.setColor(colour);
-			canvas.drawPoint(position.x, position.y, paint);
+		public	void add_point(PointF position, int colour) {
+			p.setColor(colour);
+			canvas.drawPoint(position.x, position.y, p);
 		}
 	}
 }
