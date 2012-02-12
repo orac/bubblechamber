@@ -1,5 +1,7 @@
 package com.shadowburst.bubblechamber;
 
+import com.shadowburst.TimeIntervalPreference;
+
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
@@ -18,11 +20,16 @@ public class WallpaperService extends
 		BubbleChamber chamber;
 		private SharedPreferences prefs;
 		private volatile int millis_per_frame;
+		private volatile boolean reset_enabled;
+		private volatile long frame_to_reset;
 		
 		private final Runnable stepper = new Runnable() {
 			public void run() {
-				chamber.step_all();
+				long frame = chamber.step_all();
 				draw();
+				if (reset_enabled && frame >= frame_to_reset) {
+					chamber.reset();
+				}
 				handler.removeCallbacks(this);
 				handler.postDelayed(this, millis_per_frame);
 			}
@@ -83,10 +90,20 @@ public class WallpaperService extends
 			}
 		}
 
+		private void update_frame_to_reset() {
+			if (reset_enabled) {
+				long current_frame = 0;
+				long reset_interval_frames = TimeIntervalPreference.to_milliseconds(prefs.getInt("reset_time", 0)) / millis_per_frame;
+				frame_to_reset = current_frame + reset_interval_frames;
+			}
+		}
+		
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			assert(sharedPreferences == prefs);
 			if (key == null || key.equals(new String("framerate"))) {
 				millis_per_frame = sharedPreferences.getInt("framerate", 500);
+				update_frame_to_reset();
 			}
 			if (chamber != null && (key == null || key.equals(new String("palette")))) {
 				String defaultPalette = WallpaperService.this.getResources().getStringArray(R.array.palettevalues)[0];
@@ -94,6 +111,10 @@ public class WallpaperService extends
 			}
 			if (chamber != null && (key == null || key.equals(new String("num_particles")))) {
 				chamber.set_particle_fraction(sharedPreferences.getInt("num_particles", 50) / 100.0f);
+			}
+			if (key == null || key.equals(new String("reset")) || key.equals(new String("reset_time"))) {
+				reset_enabled = sharedPreferences.getBoolean("reset", false);
+				update_frame_to_reset();
 			}
 		}
 	}

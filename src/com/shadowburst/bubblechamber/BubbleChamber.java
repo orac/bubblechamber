@@ -59,13 +59,18 @@ final class BubbleChamber {
 		palette = new Palette(input);
 
 		fader.setColor(palette.get_background());
+		reset();
+	}
+
+	void reset() {
 		clear();
+		frame_number = 0;
 
 		for (Particle p : particles) {
 			p.generate(rng, palette);
-		}
+		}	
 	}
-
+	
 	/**
 	 * @brief Sets how many particles there are.
 	 * 
@@ -80,12 +85,12 @@ final class BubbleChamber {
 				* backbuffer.getHeight() * particle_frac) / 500.0f);
 		num_particles = Math.max(num_particles, 1);
 		
-		float quark_frac = .3f;
-		float muon_frac = .42f;
-		float hadron_frac = .21f;
-		int num_quarks = (int) (quark_frac
+		final float quark_frac = .3f;
+		final float muon_frac = .42f;
+		final float hadron_frac = .21f;
+		final int num_quarks = (int) (quark_frac
 				/ (quark_frac + muon_frac + hadron_frac) * num_particles);
-		int num_hadrons = (int) (hadron_frac
+		final int num_hadrons = (int) (hadron_frac
 				/ (quark_frac + muon_frac + hadron_frac) * num_particles);
 
 		particles = new Particle[num_particles];
@@ -122,8 +127,11 @@ final class BubbleChamber {
 						.getHeight() - canvas.getHeight()) / 2.0f, new Paint());
 	}
 
-	public void step_all() {
-		++frame_number;
+	public long get_frame_number() {
+		return frame_number;
+	}
+	
+	public long step_all() {
 		if (--fade_out_frame_counter == 0) {
 			fade_out_frame_counter = 20;
 			canvas.drawPaint(fader);
@@ -137,6 +145,7 @@ final class BubbleChamber {
 				p.generate(rng, palette);
 			}
 		}
+		return ++frame_number;
 	}
 
 	private final class AddPointCallback extends Particle.StepCallback {
