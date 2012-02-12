@@ -8,6 +8,10 @@ import android.graphics.PointF;
 final class BubbleChamber {
 	private Particle[] particles;
 	private Bitmap backbuffer;
+	
+	/** A canvas for drawing to @c backbuffer.
+	 * @invariant Not null.
+	 */
 	private Canvas canvas;
 	
 	/** Supplies random numbers to particles.
@@ -36,21 +40,19 @@ final class BubbleChamber {
 	 */
 	private AddPointCallback cb;
 
+	/** Set the size of the back buffer.
+	 * 
+	 * This should match the virtual size of the screen. Doesn't affect the size of the render.
+	 * 
+	 * @param width The width of the back buffer. Not all of this need be visible on screen at once.
+	 * @param height The width of the back buffer. Not all of this need be visible on screen at once.
+	 */
 	private void set_backbuffer(int width, int height) {
-		int max_dimension = Math.max(width, height);
-		int min_dimension = Math.min(width, height);
-		backbuffer = Bitmap.createBitmap(max_dimension, max_dimension,
+		backbuffer = Bitmap.createBitmap(width, height,
 				Bitmap.Config.ARGB_8888);
 		clear();
-		if (canvas == null) {
-			canvas = new Canvas();
-		} else {
-			canvas.setMatrix(null);
-		}
 		canvas.setBitmap(backbuffer);
-		canvas.translate(backbuffer.getWidth() / 2.0f,
-				backbuffer.getHeight() / 2.0f);
-		canvas.scale(min_dimension / 200.0f, min_dimension / 200.0f);
+		/* Clear the new bitmap to the background colour before we do anything else. */ 
 		canvas.drawPaint(fader);
 	}
 
@@ -64,6 +66,8 @@ final class BubbleChamber {
 		fader.setDither(false);
 		fader.setColor(this.palette.get_background());
 		fader.setAlpha(10);
+		
+		canvas = new Canvas();
 		
 		set_backbuffer(width, height);
 
@@ -100,7 +104,7 @@ final class BubbleChamber {
 				* backbuffer.getHeight() * particle_frac) / 500.0f);
 		num_particles = Math.max(num_particles, 1);
 		
-		if (particles.length != num_particles) {
+		if (particles == null || particles.length != num_particles) {
 			final float quark_frac = .3f;
 			final float muon_frac = .42f;
 			final float hadron_frac = .21f;
@@ -137,11 +141,17 @@ final class BubbleChamber {
 			set_backbuffer(width, height);
 		}
 	}
+	
+	void set_radius(int radius) {
+		canvas.setMatrix(null);
+		canvas.translate(backbuffer.getWidth() / 2.0f,
+				backbuffer.getHeight() / 2.0f);
+		canvas.scale(radius / 100.0f, radius / 100.0f);
+
+	}
 
 	public void draw(Canvas output) {
-		output.drawBitmap(backbuffer,
-				(output.getWidth() - canvas.getWidth()) / 2.0f, (output
-						.getHeight() - canvas.getHeight()) / 2.0f, noop);
+		output.drawBitmap(backbuffer, 0.0f, 0.0f, noop);
 	}
 
 	public long get_frame_number() {

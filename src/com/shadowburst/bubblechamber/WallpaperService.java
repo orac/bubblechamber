@@ -4,6 +4,7 @@ import com.shadowburst.TimeIntervalPreference;
 
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.os.Handler;
 
@@ -22,6 +23,7 @@ public class WallpaperService extends
 		private volatile int millis_per_frame;
 		private volatile boolean reset_enabled;
 		private volatile long frame_to_reset;
+		private int x_offset, y_offset;
 		
 		private final Runnable stepper = new Runnable() {
 			public void run() {
@@ -49,21 +51,34 @@ public class WallpaperService extends
 		
 		@Override
 		public void onOffsetsChanged(float xOffset, float yOffset, float xStep, float yStep, int xPixels, int yPixels) {
+			super.onOffsetsChanged(xOffset, yOffset, xStep, yStep, xPixels, yPixels);
+			x_offset = xPixels;
+			y_offset = yPixels;
 			draw();
 		}
 		
 		@Override
-		public void onSurfaceChanged(SurfaceHolder holder, int format,
-				int width, int height) {
-			super.onSurfaceChanged(holder, format, width, height);
+		public void onDesiredSizeChanged(int desiredWidth, int desiredHeight) {
+			if (chamber != null) {
+				chamber.resize(desiredWidth, desiredHeight);
+			}
+		}
+		
+		@Override
+		public void onSurfaceCreated(SurfaceHolder holder) {
 			if (chamber == null) {
 				String defaultPalette = WallpaperService.this.getResources().getStringArray(R.array.palettevalues)[0];
 				String palette = prefs.getString("palette", defaultPalette);
 				float num_particles = prefs.getInt("num_particles", 50) / 100.0f;
-				chamber = new BubbleChamber(width, height, palette, num_particles);
-			} else {
-				chamber.resize(width, height);
+				chamber = new BubbleChamber(getDesiredMinimumWidth(), getDesiredMinimumHeight(), palette, num_particles);
 			}
+		}
+		
+		@Override
+		public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+			super.onSurfaceChanged(holder, format, width, height);
+			int radius = Math.min(width, height)/ 2;
+			chamber.set_radius(radius);
 			draw();
 		}
 
@@ -83,6 +98,7 @@ public class WallpaperService extends
 			try {
 				c = holder.lockCanvas();
 				if (c != null) {
+					c.translate(x_offset, y_offset);	
 					chamber.draw(c);
 				}
 			} finally {
