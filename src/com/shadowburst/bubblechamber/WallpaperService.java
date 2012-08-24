@@ -4,7 +4,6 @@ import com.shadowburst.TimeIntervalPreference;
 
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.os.Handler;
 
